@@ -36,8 +36,9 @@ int consume() {
 }
 
 void *producer(void *varg) {
+	long start = (long) varg;
 	for (int i = 0; i < 1000; i++) {
-		produce(i);
+		produce(start + i);
 	}
 	return NULL;
 }
@@ -57,8 +58,9 @@ int main(void)
 	sem_init(&items, 0, 0);
 
 	pthread_t p_thread, c_thread;
-	pthread_create(&p_thread, NULL, producer, NULL);
-	pthread_create(&p_thread, NULL, producer, NULL);
+	pthread_create(&p_thread, NULL, producer, (void *) 0);
+	pthread_create(&p_thread, NULL, producer, (void *) 1000);
+	pthread_create(&p_thread, NULL, producer, (void *) 2000);
 	pthread_create(&c_thread, NULL, consumer, NULL);
 	pthread_create(&c_thread, NULL, consumer, NULL);
 	pthread_create(&c_thread, NULL, consumer, NULL);
